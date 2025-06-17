@@ -8,7 +8,7 @@ const authController = require("../controllers/authController");
 const userRouter = express.Router();
 
 // Load auth page (optional)
-userRouter.get("/auth", authController.loadAuth);
+// userRouter.get("/auth", authController.loadAuth);
 
 // Route for Google Login
 // userRouter.get(
@@ -34,7 +34,7 @@ userRouter.get("/auth", authController.loadAuth);
 // );
 
 // Failure route
-userRouter.get("/auth/failure", authController.failureGoogleLogin);
+// userRouter.get("/auth/failure", authController.failureGoogleLogin);
 userRouter.get("/me", authController.protect, authController.getMe);
 
 userRouter.route("/sign-in").post(authController.singIn);
@@ -48,10 +48,7 @@ userRouter
   .route("/change-password")
   .patch(authController.protect, authController.changePassword);
 
-userRouter
-  .route("/")
-  .all(authController.loadAuth) // apply auth before any method if needed
-  .get(userController.getAllUsers);
+userRouter.get("/",authController.protect, userController.getAllUsers);
 userRouter.patch("/cart/add", authController.protect, userController.addToCart);
 userRouter.delete(
   "/cart/remove",

@@ -7,7 +7,7 @@ const userController = require("../controllers/userController");
 const orderRouter = express.Router();
 
 // Load auth page (optional)
-orderRouter.get("/auth", authController.loadAuth);
+// orderRouter.get("/auth", authController.loadAuth);
 
 // Route for Google Login
 // orderRouter.get(
@@ -31,8 +31,8 @@ orderRouter.get("/auth", authController.loadAuth);
 // );
 
 // Failure route
-orderRouter.get("/auth/failure", authController.failureGoogleLogin);
-orderRouter.get("/me", authController.protect, authController.getMe);
+// orderRouter.get("/auth/failure", authController.failureGoogleLogin);
+// orderRouter.get("/me", authController.protect, authController.getMe);
 
 orderRouter.route("/sign-in").post(authController.singIn);
 orderRouter.route("/sign-up").post(authController.signup);
@@ -45,10 +45,10 @@ orderRouter
   .route("/change-password")
   .patch(authController.protect, authController.changePassword);
 
-orderRouter
-  .route("/")
-  .all(authController.loadAuth) // apply auth before any method if needed
-  .get(userController.getAllUsers);
+// orderRouter
+//   .route("/")
+//   .all(authController.loadAuth) // apply auth before any method if needed
+//   .get(userController.getAllUsers);
 
 orderRouter
   .route("/:id")

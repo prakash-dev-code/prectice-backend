@@ -2,11 +2,14 @@ const nodemailer = require("nodemailer");
 
 const sendEmail = async (props) => {
   const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io", 
+    host: "sandbox.smtp.mailtrap.io",
+    // process.env.NODE_ENV === "production"
+    //   ? "smtp-relay.brevo.com"
+    //   : "sandbox.smtp.mailtrap.io",
     port: 2525,
     auth: {
-      user: process.env.SMTP_USER_NAME,
-      pass: process.env.SMTP_USER_PASSWORD,
+      user: process.env.SMTP_DEV_USER, // Update this for production
+      pass: process.env.SMTP_DEV_PASS, // Update this for production
     },
     secure: false,
     tls: {
@@ -16,8 +19,7 @@ const sendEmail = async (props) => {
   });
 
   const mailOptions = {
-
-    from: "Prakash <noreply@example.com>",
+    from: "sahuprakash643@gmail.com",
     to: props.email,
     subject: props.subject,
     text: props.text,
@@ -25,6 +27,7 @@ const sendEmail = async (props) => {
   };
 
   try {
+    console.log(process.env.NODE_ENV, "E");
     const info = await transporter.sendMail(mailOptions);
     console.log("Email sent: ", info.response); // Log the response from the SMTP server
     return info;
