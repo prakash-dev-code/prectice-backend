@@ -6,8 +6,11 @@ exports.updateProduct = Factory.updateOne(Product);
 exports.deleteProduct = Factory.deleteOne(Product);
 exports.getProduct = Factory.getOne(Product);
 
+// In your controller
 exports.createProduct = async (req, res) => {
   try {
+
+    // Extract text fields
     const {
       name,
       description,
@@ -19,22 +22,43 @@ exports.createProduct = async (req, res) => {
       variants,
     } = req.body;
 
-    // map S3 uploaded images
-    const imageData = req.files.map((file, i) => ({
-      url: file.location,
-      altText: req.body[`altText${i}`] || `Image ${i + 1}`,
-    }));
+    // Process variants safely
+    let parsedVariants = [];
+    if (variants) {
+      try {
+        parsedVariants =
+          typeof variants === "string" ? JSON.parse(variants) : variants;
+      } catch (e) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid variants format",
+          error: e.message,
+        });
+      }
+    }
 
+    // Process images
+    const imageData = (req.files || []).map((file, i) => {
+      // Get altText for this index
+      const altText = req.body[`altText${i}`] || `Image ${i + 1}`;
+
+      return {
+        url: file.location, // S3 URL
+        altText: altText,
+      };
+    });
+
+    // Create product
     const product = await Product.create({
       name,
       description,
-      price,
-      discountedPrice,
+      price: parseFloat(price),
+      discountedPrice: parseFloat(discountedPrice),
       category,
-      stock,
+      stock: parseInt(stock),
       seller,
-      variants: JSON.parse(variants), // if sent as stringified JSON
-      images: imageData,
+      variants: parsedVariants,
+      images: imageData, // This will store S3 URLs in MongoDB
     });
 
     res.status(201).json({
@@ -44,7 +68,11 @@ exports.createProduct = async (req, res) => {
     });
   } catch (error) {
     console.error("Create Product Error:", error);
-    res.status(500).json({ success: false, message: "Server Error" });
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message,
+    });
   }
 };
 
