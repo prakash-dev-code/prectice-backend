@@ -427,7 +427,7 @@ exports.forgetPassword = async function (req, res, next) {
             <tr>
               <td style="text-align: center; padding-bottom:25px">
                 <a href="#">
-                <h2>Dev Shop</h3>
+                <h2>eCommerce</h3>
                 </a>
               </td>
             </tr>
@@ -456,7 +456,7 @@ exports.forgetPassword = async function (req, res, next) {
                 <p style="margin: 0; font-size: 13px; line-height: 22px; color:#9ea8bb;">
                   This is an automatically generated email. Please do not reply to this email. If you face any issues,
                   please contact us at
-                  <a href="#" style="color: #6576ff;">devshop@gmail.com</a>
+                  <a href="mailto:sahuprakash643@gmail.com" style="color: #6576ff;">sahuprakash643@gmail.com</a>
                 </p>
               </td>
             </tr>
@@ -467,7 +467,7 @@ exports.forgetPassword = async function (req, res, next) {
             <tr>
               <td style="text-align: center; padding:25px 20px 0;">
                 <p style="font-size: 13px;">
-                  Copyright © 2025 Dev Shop. All rights reserved.
+                  Copyright © 2025 eCommerce. All rights reserved.
                   
                 </p>
               </td>
