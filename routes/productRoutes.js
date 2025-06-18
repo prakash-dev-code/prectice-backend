@@ -2,7 +2,7 @@ const express = require("express");
 const upload = require("../config/s3");
 const productController = require("../controllers/productControlller");
 // const passport = require("passport");
-// const authController = require("../controllers/authController");
+const authController = require("../controllers/authController");
 
 const productRouter = express.Router();
 
@@ -10,7 +10,7 @@ const productRouter = express.Router();
 
 productRouter
   .route("/")
-  //   .all(authController.loadAuth) // apply auth before any method if needed
+  .all(authController.protect) // apply protected route
   .get(productController.getAllProduct)
   .post(upload.array("images"), productController.createProduct);
 

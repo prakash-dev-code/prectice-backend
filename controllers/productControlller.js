@@ -9,6 +9,7 @@ exports.getProduct = Factory.getOne(Product);
 // In your controller
 exports.createProduct = async (req, res) => {
   try {
+    console.log(req, "REq")
 
     // Extract text fields
     const {
@@ -18,7 +19,6 @@ exports.createProduct = async (req, res) => {
       discountedPrice,
       category,
       stock,
-      seller,
       variants,
     } = req.body;
 
@@ -56,7 +56,7 @@ exports.createProduct = async (req, res) => {
       discountedPrice: parseFloat(discountedPrice),
       category,
       stock: parseInt(stock),
-      seller,
+      seller:req.user._id,
       variants: parsedVariants,
       images: imageData, // This will store S3 URLs in MongoDB
     });
