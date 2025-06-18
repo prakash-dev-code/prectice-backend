@@ -13,6 +13,7 @@ const productRoutes = require("./routes/productRoutes");
 const allowedOrigins = [
   process.env.FRONTEND_LOCAL_HOST_1,
   process.env.FRONTEND_LOCAL_HOST_2,
+  process.env.FRONTEND_LOCAL_HOST_3,
   process.env.FRONTEND_LIVE_HOST,
 ];
 

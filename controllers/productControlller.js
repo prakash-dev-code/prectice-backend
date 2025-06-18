@@ -2,14 +2,74 @@ const Product = require("./../models/productModel");
 const Factory = require("./handleCrud");
 
 exports.getAllProduct = Factory.getAll(Product);
-exports.updateProduct = Factory.updateOne(Product);
 exports.deleteProduct = Factory.deleteOne(Product);
 exports.getProduct = Factory.getOne(Product);
+exports.updateProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    // Find the product first
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    // Update text fields
+    const fieldsToUpdate = [
+      "name",
+      "description",
+      "price",
+      "discountedPrice",
+      "category",
+      "stock"
+    ];
+
+    fieldsToUpdate.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        product[field] = req.body[field];
+      }
+    });
+
+    // Handle images if new ones are uploaded
+    if (req.files && req.files.length > 0) {
+      const newImages = req.files.map((file, i) => {
+        const altText = req.body[`altText${i}`] || `Image ${i + 1}`;
+        return {
+          url: file.location,
+          altText: altText,
+        };
+      });
+
+      // If you want to replace all old images:
+      product.images = newImages;
+
+      // If you want to add to existing images instead:
+      // product.images.push(...newImages);
+    }
+
+    const updatedProduct = await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Update Product Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message,
+    });
+  }
+};
 
 // In your controller
 exports.createProduct = async (req, res) => {
   try {
-    console.log(req, "REq")
 
     // Extract text fields
     const {
@@ -19,23 +79,10 @@ exports.createProduct = async (req, res) => {
       discountedPrice,
       category,
       stock,
-      variants,
     } = req.body;
 
     // Process variants safely
-    let parsedVariants = [];
-    if (variants) {
-      try {
-        parsedVariants =
-          typeof variants === "string" ? JSON.parse(variants) : variants;
-      } catch (e) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid variants format",
-          error: e.message,
-        });
-      }
-    }
+
 
     // Process images
     const imageData = (req.files || []).map((file, i) => {
@@ -57,7 +104,6 @@ exports.createProduct = async (req, res) => {
       category,
       stock: parseInt(stock),
       seller:req.user._id,
-      variants: parsedVariants,
       images: imageData, // This will store S3 URLs in MongoDB
     });
 

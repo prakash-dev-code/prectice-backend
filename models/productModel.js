@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, "Product category is required"],
-      enum: ["electronics", "clothing", "books", "home", "other"],
+      enum: ["electronics", "clothing", "books", "computer", "games_and_videos","mobile_and_tablet","home","watches", "other"],
     },
     images: [
       {
@@ -52,15 +52,6 @@ const productSchema = new mongoose.Schema(
         default: 0,
       },
     },
-    variants: [
-      {
-        size: String,
-        color: String,
-        sku: String,
-        price: Number,
-        stock: Number,
-      },
-    ],
     seller: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
