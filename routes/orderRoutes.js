@@ -52,7 +52,7 @@ orderRouter
   .delete(authController.protect, orderController.deleteOrder);
 orderRouter
   .route("/")
-  .get(authController.protect, orderController.getAllOrders)
+  .get(authController.protect, orderController.getAllOrdersAdmin)
   .post(authController.protect, orderController.createOrder);
 
 module.exports = orderRouter;

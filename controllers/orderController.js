@@ -2,7 +2,7 @@ const Order = require("./../models/orderModel");
 const User = require("../models/userModel");
 const Factory = require("./handleCrud");
 
-exports.getAllOrders = Factory.getAll(Order);
+exports.getAllOrdersAdmin = Factory.getAll(Order);
 exports.updateOrder = Factory.updateOne(Order);
 exports.deleteOrder = Factory.deleteOne(Order);
 exports.getOrder = Factory.getOne(Order);
