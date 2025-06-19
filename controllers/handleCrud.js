@@ -74,6 +74,15 @@ exports.getAll = (Model) =>
     let filter = {};
 
     if (req.params.tourId) filter = { tour: req.params.tourId };
+
+    // 1. Initial query with filters (no pagination yet)
+    const featureForCount = new ApiFeature(
+      Model.find(filter),
+      req.query
+    ).filter();
+    const totalCount = await featureForCount.query.clone().countDocuments(); // clone to safely reuse query
+
+    // 2. Final query with pagination
     const feature = new ApiFeature(Model.find(filter), req.query)
       .filter()
       .sort()
@@ -84,6 +93,7 @@ exports.getAll = (Model) =>
     res.status(200).json({
       status: "success",
       result: doc.length,
+      totalCount, // ✅ total number of matched docs
       data: {
         doc,
       },

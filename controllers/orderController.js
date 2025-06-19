@@ -2,7 +2,7 @@ const Order = require("./../models/orderModel");
 const User = require("../models/userModel");
 const Factory = require("./handleCrud");
 
-exports.getAllOrdersAdmin = Factory.getAll(Order);
+// exports.getAllOrdersAdmin = Factory.getAll(Order);
 exports.updateOrder = Factory.updateOne(Order);
 exports.deleteOrder = Factory.deleteOne(Order);
 exports.getOrder = Factory.getOne(Order);
@@ -44,9 +44,8 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-
-const Order = require("../models/orderModel");
-const User = require("../models/userModel");
+// const Order = require("../models/orderModel");
+// const User = require("../models/userModel");
 
 exports.getAllOrders = async (req, res) => {
   try {
@@ -57,7 +56,7 @@ exports.getAllOrders = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(401).json({
+      return res.status(400).json({
         status: "fail",
         message: "User not found",
       });
