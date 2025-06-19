@@ -1,6 +1,6 @@
-const catchAsync = require('./../utils/catchAsync');
-const AppError = require('./../utils/appError');
-const ApiFeature = require('./../utils/apiFeatures');
+const catchAsync = require("./../utils/catchAsync");
+const AppError = require("./../utils/appError");
+const ApiFeature = require("./../utils/apiFeatures");
 
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -13,8 +13,8 @@ exports.deleteOne = (Model) =>
     }
 
     res.status(200).json({
-      status: 'success',
-      message: 'deleted successfully',
+      status: "success",
+      message: "deleted successfully",
     });
   });
 
@@ -30,7 +30,7 @@ exports.updateOne = (Model) =>
     }
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         data: doc,
       },
@@ -42,7 +42,7 @@ exports.creteOne = (Model) =>
     const newDoc = await Model.create(req.body);
 
     res.status(201).json({
-      status: 'success',
+      status: "success",
       data: {
         data: newDoc,
       },
@@ -62,7 +62,7 @@ exports.getOne = (Model, popOptions) =>
     }
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         doc,
       },
@@ -82,7 +82,7 @@ exports.getAll = (Model) =>
     const doc = await feature.query;
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       result: doc.length,
       data: {
         doc,

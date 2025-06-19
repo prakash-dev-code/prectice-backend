@@ -61,21 +61,12 @@ const userSchema = new mongoose.Schema({
     trim: true,
   },
   addresses: {
-    shipping: {
-      type: {
-        location: String,
-
-        phone: String,
-      },
-      default: null,
+    type: {
+      address: String,
+      phone: String,
+      name: String,
     },
-    billing: {
-      type: {
-        location: String,
-        phone: String,
-      },
-      default: null,
-    },
+    default: null,
   },
   country: {
     type: String,

@@ -18,56 +18,20 @@ const orderSchema = new mongoose.Schema(
     ],
     shippingAddress: {
       type: {
-        location: String,
+        address: String,
         phone: String,
       },
       required: true,
     },
-    billingAddress: {
-      type: {
-        location: String,
-        phone: String,
-      },
-      required: true,
-    },
-    payment: {
-      method: {
-        type: String,
-        enum: ["credit_card", "paypal", "stripe", "cod"],
-        required: true,
-      },
-      status: {
-        type: String,
-        enum: ["pending", "completed", "failed", "refunded"],
-        default: "pending",
-      },
-      transactionId: String,
-      amount: {
-        type: Number,
-        required: true,
-      },
-    },
+
     status: {
       type: String,
       enum: ["processing", "shipped", "delivered", "cancelled", "returned"],
       default: "processing",
     },
-    total: {
-      subtotal: Number,
-      shipping: Number,
-      tax: Number,
-      discount: Number,
-      grandTotal: {
-        type: Number,
-        required: true,
-      },
+    price: {
+      total: Number,
     },
-    tracking: {
-      carrier: String,
-      number: String,
-      url: String,
-    },
-    notes: String,
   },
   {
     timestamps: true,
@@ -79,6 +43,8 @@ const orderSchema = new mongoose.Schema(
 // Indexes
 orderSchema.index({ user: 1, status: 1 });
 orderSchema.index({ createdAt: -1 });
+
+
 
 // Virtual populate with reviews
 orderSchema.virtual("reviews", {
@@ -95,6 +61,13 @@ orderSchema.pre(/^find/, function (next) {
   }).populate({
     path: "items.product",
     select: "name images",
+  });
+  next();
+});
+
+orderSchema.post("save", async function (doc, next) {
+  await mongoose.model("User").findByIdAndUpdate(doc.user, {
+    $push: { orders: doc._id },
   });
   next();
 });

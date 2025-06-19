@@ -41,19 +41,18 @@ orderRouter.route("/forget-password").post(authController.forgetPassword);
 orderRouter.route("/reset-password/:token").patch(authController.resetPassword);
 // orderRouter.route("/google/").post(authController.googleLogin);
 
-orderRouter
-  .route("/change-password")
-  .patch(authController.protect, authController.changePassword);
-
 // orderRouter
-//   .route("/")
-//   .all(authController.loadAuth) // apply auth before any method if needed
-//   .get(userController.getAllUsers);
+//   .route("/change-password")
+//   .patch(authController.protect, authController.changePassword);
 
 orderRouter
   .route("/:id")
-  .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+  .get(authController.protect, orderController.getOrder)
+  .patch(authController.protect, orderController.updateOrder)
+  .delete(authController.protect, orderController.deleteOrder);
+orderRouter
+  .route("/")
+  .get(authController.protect, orderController.getAllOrders)
+  .post(authController.protect, orderController.createOrder);
 
 module.exports = orderRouter;
