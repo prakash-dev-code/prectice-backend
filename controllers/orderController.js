@@ -43,3 +43,52 @@ exports.createOrder = async (req, res) => {
     });
   }
 };
+
+
+const Order = require("../models/orderModel");
+const User = require("../models/userModel");
+
+exports.getAllOrders = async (req, res) => {
+  try {
+    // req.user is set from your protect middleware (auth)
+    const userId = req.user.id;
+
+    // Get user to check role
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(401).json({
+        status: "fail",
+        message: "User not found",
+      });
+    }
+
+    let orders;
+
+    if (user.role === "admin") {
+      // Admin gets all orders
+      orders = await Order.find({})
+        .populate("user", "name email photo")
+        .populate("items.product", "name images");
+    } else {
+      // Normal user gets only their orders
+      orders = await Order.find({ user: userId })
+        .populate("user", "name email photo")
+        .populate("items.product", "name images");
+    }
+
+    res.status(200).json({
+      status: "success",
+      result: orders.length,
+      data: {
+        doc: orders,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Something went wrong!",
+    });
+  }
+};
