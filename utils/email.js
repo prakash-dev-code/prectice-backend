@@ -2,14 +2,14 @@ const nodemailer = require("nodemailer");
 
 const sendEmail = async (props) => {
   const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
+    host: "smtp-relay.brevo.com",
     // process.env.NODE_ENV === "production"
     //   ? "smtp-relay.brevo.com"
     //   : "sandbox.smtp.mailtrap.io",
     port: 2525,
     auth: {
-      user: process.env.SMTP_DEV_USER, // Update this for production
-      pass: process.env.SMTP_DEV_PASS, // Update this for production
+      user: process.env.SMTP_PROD_USER, // Update this for production
+      pass: process.env.SMTP_PROD_PASS, // Update this for production
     },
     secure: false,
     tls: {
