@@ -7,11 +7,11 @@ const authController = require("../controllers/authController");
 const productRouter = express.Router();
 
 // Load auth page (optional)
+productRouter.route("/").get(productController.getAllProduct);
 
 productRouter
   .route("/")
   .all(authController.protect) // apply protected route
-  .get(productController.getAllProduct)
   .post(upload.array("images"), productController.createProduct);
 
 productRouter
